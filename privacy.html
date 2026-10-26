@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy policy · ClipOps</title>
+<meta name="description" content="How ClipOps, Tally Studio's private publishing tool, handles YouTube data.">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<main>
+  <p class="back"><a href="./">ClipOps</a></p>
+  <h1>Privacy policy</h1>
+  <p class="meta">Effective 27 October 2026</p>
+
+  <p>ClipOps is a private tool that Tally Studio uses to prepare short videos and publish them to its own YouTube channels. It is not offered to the public: only Tally Studio's owner signs in, and it connects only to channels Tally Studio controls.</p>
+  <dl>
+    <dt>Operator</dt><dd>Tally Studio</dd>
+    <dt>Contact and deletion requests</dt><dd><a href="mailto:thanosgoik@gmail.com">thanosgoik@gmail.com</a></dd>
+  </dl>
+
+  <h2>YouTube API Services</h2>
+  <p>ClipOps uses YouTube API Services. YouTube use is subject to the <a href="https://www.youtube.com/t/terms">YouTube Terms of Service</a>, and Google handles data under the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>. ClipOps is not operated or endorsed by Google or YouTube.</p>
+
+  <h2>What ClipOps receives from Google</h2>
+  <p>When the owner connects a YouTube channel, Google asks the owner to approve access. ClipOps requests only:</p>
+  <ul>
+    <li><strong>Upload videos</strong> (<code>youtube.upload</code>), to upload approved videos and schedule them.</li>
+    <li><strong>View the YouTube account</strong> (<code>youtube.readonly</code>), to confirm the right channel is connected and to check the status of videos ClipOps uploaded.</li>
+    <li><strong>View YouTube Analytics reports</strong> (<code>yt-analytics.readonly</code>), only if the owner grants it: aggregate numbers for the channel's own videos, such as views and watch time, used to learn which clips work.</li>
+  </ul>
+  <p>ClipOps never receives the owner's Google password. It does not read viewer identities, comments or Gmail.</p>
+
+  <h2>What ClipOps stores</h2>
+  <ul>
+    <li>The connected channel's ID and handle.</li>
+    <li>Google access and refresh tokens, encrypted. Only the separate uploading service can read them; the AI agents cannot.</li>
+    <li>For each video ClipOps uploads: its YouTube video ID, link, schedule and upload status, plus quota and error records.</li>
+    <li>If Analytics access is granted: aggregate performance numbers for those videos.</li>
+  </ul>
+  <p>ClipOps also stores material the owner supplies: source videos, transcripts, rights evidence, titles and approval decisions. It never downloads videos from YouTube.</p>
+
+  <h2>How the data is used and shared</h2>
+  <p>Only to verify the connected channel, run rights and safety checks, publish and schedule approved videos, and improve future clips. Video files and their details go to Google through its official APIs. ClipOps runs on computers the operator controls.</p>
+  <p>ClipOps does not sell YouTube data, does not use it for advertising and does not share it with anyone, with one exception: our AI provider, Anthropic, processes source transcripts and video frames, and, if Analytics access is granted, aggregate performance numbers, to help choose, edit and package clips. Google credentials and tokens are never sent to it.</p>
+
+  <h2>Disconnecting and deleting data</h2>
+  <ul>
+    <li>The owner can choose <strong>Disconnect YouTube</strong> in ClipOps. Uploads stop at once. ClipOps asks Google to revoke access and deletes the encrypted tokens when Google confirms, or after seven days if confirmation never arrives.</li>
+    <li>Access can also be removed at any time in <a href="https://myaccount.google.com/connections">Google Account connections</a>.</li>
+    <li>Upload records are kept as the channel's publishing history until deletion is requested. To have them or any other stored YouTube data deleted, email <a href="mailto:thanosgoik@gmail.com">thanosgoik@gmail.com</a>. The operator deletes it within seven calendar days.</li>
+    <li>Disconnecting does not delete videos already on YouTube. Those are managed in YouTube Studio.</li>
+  </ul>
+
+  <h2>Security</h2>
+  <p>Tokens are encrypted, database access is split by role, and private configuration is kept out of code repositories, logs and AI inputs. The ClipOps app uses one sign-in cookie, for the owner only.</p>
+
+  <h2>These pages</h2>
+  <p>These pages are hosted on GitHub Pages. They set no cookies and contain no analytics. GitHub may log visitors' IP addresses for security, as described in the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub Privacy Statement</a>.</p>
+
+  <h2>Changes</h2>
+  <p>When the way ClipOps uses data changes, this page and its date are updated.</p>
+</main>
+<footer>
+  <span>© 2026 Tally Studio</span>
+  <a href="./">ClipOps</a>
+</footer>
+</body>
+</html>
