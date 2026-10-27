@@ -23,40 +23,44 @@
   <p>ClipOps uses YouTube API Services. YouTube use is subject to the <a href="https://www.youtube.com/t/terms">YouTube Terms of Service</a>, and Google handles data under the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>. ClipOps is not operated or endorsed by Google or YouTube.</p>
 
   <h2>What ClipOps receives from Google</h2>
-  <p>When the owner connects a YouTube channel, Google asks the owner to approve access. ClipOps requests only:</p>
+  <p>When the owner connects a YouTube channel, Google asks the owner to approve access. The current connections use:</p>
   <ul>
     <li><strong>Upload videos</strong> (<code>youtube.upload</code>), to upload approved videos and schedule them.</li>
-    <li><strong>View the YouTube account</strong> (<code>youtube.readonly</code>), to confirm the right channel is connected and to check the status of videos ClipOps uploaded.</li>
-    <li><strong>View YouTube Analytics reports</strong> (<code>yt-analytics.readonly</code>), only if the owner grants it: aggregate numbers for the channel's own videos, such as views and watch time, used to learn which clips work.</li>
+    <li><strong>View the YouTube account</strong> (<code>youtube.readonly</code>), to confirm the right channel is connected and read authorized video information when an implemented feature needs it.</li>
   </ul>
+  <p>If the owner configures a playlist, a new connection instead requests <code>youtube.force-ssl</code>. This is a wider permission covering video and playlist management, needed to add an uploaded video to that playlist. The owner reviews that permission before consent. Neither current connection uses it.</p>
+  <p>This version does not request <code>yt-analytics.readonly</code>, collect YouTube Analytics reports or send performance numbers to an AI provider. Declaring a scope in Google Cloud Console does not grant it to ClipOps.</p>
   <p>ClipOps never receives the owner's Google password. It does not read viewer identities, comments or Gmail.</p>
 
   <h2>What ClipOps stores</h2>
   <ul>
-    <li>The connected channel's ID and handle.</li>
-    <li>Google access and refresh tokens, encrypted. Only the separate uploading service can read them; the AI agents cannot.</li>
-    <li>For each video ClipOps uploads: its YouTube video ID, link, schedule and upload status, plus quota and error records.</li>
-    <li>If Analytics access is granted: aggregate performance numbers for those videos.</li>
+    <li>The connected channel's ID and configured handle, granted permissions, project ID and connection timestamps/state.</li>
+    <li>Google access and refresh tokens, encrypted, plus short-lived connection state. Among runtime services, only the separate Publisher can read stored token ciphertext. The owner-facing API handles tokens during the connection and encrypts them for storage; AI agents cannot read the tokens.</li>
+    <li>When an upload is authorized: its YouTube video ID, link, metadata, schedule where applicable and upload status, plus quota and bounded error records. Resumable-upload session credentials are encrypted.</li>
   </ul>
   <p>ClipOps also stores material the owner supplies: source videos, transcripts, rights evidence, titles and approval decisions. It never downloads videos from YouTube.</p>
 
   <h2>How the data is used and shared</h2>
-  <p>Only to verify the connected channel, run rights and safety checks, publish and schedule approved videos, and improve future clips. Video files and their details go to Google through its official APIs. ClipOps runs on computers the operator controls.</p>
-  <p>ClipOps does not sell YouTube data, does not use it for advertising and does not share it with anyone, with one exception: our AI provider, Anthropic, processes source transcripts and video frames, and, if Analytics access is granted, aggregate performance numbers, to help choose, edit and package clips. Google credentials and tokens are never sent to it.</p>
+  <p>YouTube connection data is used to verify the channel, authorize uploads and maintain the connection. Authorized video files, publication details and declarations go to Google through its official APIs. ClipOps runs on computers the operator controls. Connecting alone does not enable publication; normal publishing is currently off.</p>
+  <p>For separately authorized AI preparation and safety review, Anthropic processes independently supplied source transcripts, selected video frames, source/rights evidence, channel instructions and clip metadata. Google credentials, tokens and resumable-upload credentials are never sent to it. No YouTube Analytics reports are currently collected or sent to Anthropic.</p>
+  <p>ClipOps does not sell YouTube data or use it for advertising. Google processes authorized API requests, Anthropic processes the preparation inputs described above, and GitHub hosts these public information pages as described below.</p>
 
   <h2>Disconnecting and deleting data</h2>
   <ul>
-    <li>The owner can choose <strong>Disconnect YouTube</strong> in ClipOps. Uploads stop at once. ClipOps asks Google to revoke access and deletes the encrypted tokens when Google confirms, or after seven days if confirmation never arrives.</li>
-    <li>Access can also be removed at any time in <a href="https://myaccount.google.com/connections">Google Account connections</a>.</li>
-    <li>Upload records are kept as the channel's publishing history until deletion is requested. To have them or any other stored YouTube data deleted, email <a href="mailto:thanosgoik@gmail.com">thanosgoik@gmail.com</a>. The operator deletes it within seven calendar days.</li>
+    <li>The owner can choose <strong>Disconnect YouTube</strong> in ClipOps. The account is marked disconnected and uploads are blocked locally at once. The separate Publisher revocation service asks Google to revoke access, making at most five attempts with increasing delays.</li>
+    <li>When Google confirms revocation or says the token is already invalid, maintenance deletes the encrypted credentials and clears the canonical channel ID. If confirmation never arrives, credentials pending disconnection for at least seven days are deleted on a maintenance pass. These actions require the revocation service to remain running; local deletion does not prove Google revoked its grant.</li>
+    <li>Access can also be removed directly in <a href="https://myaccount.google.com/connections">Google Account connections</a>. After doing that, disconnect locally as well.</li>
+    <li>Contact <a href="mailto:thanosgoik@gmail.com">thanosgoik@gmail.com</a> about deletion of other stored YouTube data. The current version does not automatically erase API-derived upload/history records or backups, and a complete verified erasure procedure and 30-day API-data refresh procedure are not implemented. Disconnect should not be understood as deleting all stored data.</li>
     <li>Disconnecting does not delete videos already on YouTube. Those are managed in YouTube Studio.</li>
   </ul>
+  <p>Maintenance checks run every 30 seconds while the revocation service is online. Expired OAuth connection state, whose lifetime is nine minutes, is also removed by maintenance. Independently supplied media and rights evidence are separate local production records.</p>
 
   <h2>Security</h2>
-  <p>Tokens are encrypted, database access is split by role, and private configuration is kept out of code repositories, logs and AI inputs. The ClipOps app uses one sign-in cookie, for the owner only.</p>
+  <p>Stored tokens are encrypted, database access is split by role, and private configuration is kept out of code repositories, logs and AI inputs. The trusted operator controls the computer, database and encryption-key backups.</p>
+  <p>The private ClipOps app uses an <code>HttpOnly</code>, <code>SameSite=Strict</code> owner-session cookie for sign-in and saves the light/dark preference in browser local storage. The current installation runs on localhost over HTTP; it does not claim to be an HTTPS-hosted public app. No advertising or usage-analytics tracker is included in the app.</p>
 
   <h2>These pages</h2>
-  <p>These pages are hosted on GitHub Pages. They set no cookies and contain no analytics. GitHub may log visitors' IP addresses for security, as described in the <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub Privacy Statement</a>.</p>
+  <p>These information pages are hosted on GitHub Pages. Our static HTML and CSS add no cookies, tracking scripts or analytics. GitHub logs visitors' IP addresses for security, as explained in its <a href="https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages#data-collection">Pages documentation</a> and <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">Privacy Statement</a>. Following an external link or sending email uses that provider's services and policies.</p>
 
   <h2>Changes</h2>
   <p>When the way ClipOps uses data changes, this page and its date are updated.</p>
